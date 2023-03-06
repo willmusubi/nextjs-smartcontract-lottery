@@ -16,7 +16,11 @@ export default function LotteryEntrance() {
 
     const dispatch = useNotification();
 
-    const { runContractFunction: enterLottery } = useWeb3Contract({
+    const {
+        runContractFunction: enterLottery,
+        isLoading,
+        isFetching,
+    } = useWeb3Contract({
         abi: abi,
         contractAddress: lotteryAddress,
         functionName: "enterLottery",
@@ -74,10 +78,12 @@ export default function LotteryEntrance() {
     };
 
     return (
-        <div>
+        <div className="p-5">
+            <h1 className="py-4 px-4 font-bold text-3xl">Musubi Lottery</h1>
             {lotteryAddress ? (
-                <div>
+                <div className="">
                     <button
+                        className="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded ml-4"
                         onClick={async () => {
                             const tx = await enterLottery({
                                 // onComplete:
@@ -87,12 +93,22 @@ export default function LotteryEntrance() {
                             });
                             const filter = { transactionHash: tx };
                         }}
+                        disabled={isLoading || isFetching} // to make the button unclickable when interact with wallet and chains
                     >
-                        Enter Lottery
+                        {isLoading || isFetching ? (
+                            <div className="animate-spin spinner-border h-6 w-24 border-b-2 rounded-full"></div>
+                        ) : (
+                            "Enter Lottery"
+                        )}
                     </button>
-                    Entrance Fee: {ethers.utils.formatEther(entranceFee)} Ether
-                    Players: {numPlayers}
-                    Recent Winner: {recentWinner}
+                    <div className="py-1 px-4 mt-4">
+                        Entrance Fee: {ethers.utils.formatEther(entranceFee)}{" "}
+                        Ether
+                    </div>
+                    <div className="py-1 px-4">Players: {numPlayers}</div>
+                    <div className="py-1 px-4">
+                        Recent Winner: {recentWinner}
+                    </div>
                 </div>
             ) : (
                 <div>

@@ -21,7 +21,6 @@ export default function Home() {
             {/* <ManualHeader /> */}
             <Header />
             <LotteryEntrance />
-            Hello!
         </>
     );
 }
